@@ -61,7 +61,44 @@ class UserService {
 
   generateToken(id) {
     return jwt.sign({ id }, config.jwtSecret, { expiresIn: "30d" });
+  
   }
+
+  async editProfile(id,name,email, password) {
+    console.log(id,name,email,password)
+    if (!name || !email || !password) {
+      throw new Error("Please add all fields");
+    }
+
+    
+
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(password, salt);
+    try {
+      // Update the user's profile with the new information
+      const updatedUser = await User.findByIdAndUpdate(
+        id,
+        {
+          name,
+          email,
+          password: hashedPassword,
+        },
+        { new: true } // Return the updated document
+      );
+  
+      if (!updatedUser) {
+        throw new Error("User not found");
+      }
+  
+      console.log("Profile updated successfully:", updatedUser);
+      return updatedUser;
+    } catch (error) {
+      console.error("Error updating profile:", error.message);
+      throw error;
+    }
+
+  }
+
 }
 
 module.exports = new UserService();

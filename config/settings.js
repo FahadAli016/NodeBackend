@@ -1,6 +1,6 @@
 const config = {
     dbUrl: process.env.MONGO_URI || "mongodb://127.0.0.1:27017/MERN_TodoApp",
-    port: process.env.PORT || 4000,
+    port: process.env.PORT || 4001,
     jwtSecret: process.env.JWT_SECRET || "ABC123"
 };
   
